@@ -21,7 +21,7 @@ public class FirstServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
+		PrintWriter out = response.getWriter(); // 수행 전에 반드시 UTF-8을 설정해줘야 한다.
 		out.print("<h1>FirstServlet 수행 완료</h1>");
 		out.print("<hr>");
 		out.print("<h2>요청 방식 : " + request.getMethod() + "</h2>");
