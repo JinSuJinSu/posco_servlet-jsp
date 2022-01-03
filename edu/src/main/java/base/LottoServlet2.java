@@ -30,17 +30,17 @@ public class LottoServlet2 extends HttpServlet {
 		
 		if(lottoCount[0]<=3) {
 			if(number==lottoValue) {
-				RequestDispatcher rd = request.getRequestDispatcher("/htmlexam/success.html");
+				RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/success.jsp");
 				rd.forward(request, response);	
 				lottoCount[0]=3;
 			}
 			else {
-				RequestDispatcher rd = request.getRequestDispatcher("/htmlexam/fail.html");
+				RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/fail.jsp");
 				rd.forward(request, response);
 			}
 		}
 		else {
-			RequestDispatcher rd = request.getRequestDispatcher("/htmlexam/impossible.html");
+			RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/impossible.jsp");
 			rd.forward(request, response);
 		}
 		

@@ -7,8 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>JSP 맛보기 예제</h1>
-<hr>
-<%= new java.util.Date() %>
+	<a href="/boardproject/board">게시판을 만들어라</a>
 </body>
 </html>
