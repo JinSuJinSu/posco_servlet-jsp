@@ -1,0 +1,27 @@
+servlet 실기
+게시판 만들기
+기본적인 회원가입, 로그인, 글쓰기 기능
++추가적인 기능이 있을 경우 가산점
+
+필기 시험
+총 30문제
+주석 문제 나올 확률 높음
+객체 스코프 100% ->Page Scope, Request Scope, Session Scope, Appication Scope(2문제가 출제됬다.)
+VO의 약어 100% -> Value of Object
+DTO, DAO 약어도 알아야 된다.
+MVC 패턴 100%->Model, View, Controller -> 1문제(간단한 서술일 가능성도 있다.)
+HTTP 프로토콜이란 무엇이고 어떤 특징을 가지고 있는가
+FirstServlet 코드는 거의 다 외워야 한다.
+Servelt의 특징을 기억하자.(장점)
+쿼리 문자열 인코딩 규칙
+get,post방식의 차이점
+Session 관련 문제는 여러개가 나와 있다.
+API 관련된 것들은 확실히 공부해야 한다.
+JSP 태그들 중 스크립트 태그에서 선언문, 표현식, 수행문 태그 특징을 파악해야 한다.
+Include 지시자 태그에 대해 알아보자
+Forward, redirect 차이점을 알아보자(어떤 상황에서 사용하는지 확실하게 이해해야 한다.)
+El문제는 2문제정도 출제됬다.(수업 잘들으면 된다.)
+
+총 28문제가 나온다.
+
+

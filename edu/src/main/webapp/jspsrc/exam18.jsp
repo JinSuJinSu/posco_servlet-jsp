@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1 style="font-family: 'Gamja Flower'">지금은
-<jsp:useBean id="obj" class="jspbean.Today" />
+<jsp:useBean id="obj" class="jspbean.Today" /> <!-- 여기서 id 값은 변수가 된다. -->
 <jsp:getProperty name="obj"  property="year" />년 
 <jsp:getProperty name="obj"  property="month" />월 
 <jsp:getProperty name="obj"  property="date" />일
