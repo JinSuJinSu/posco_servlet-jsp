@@ -46,7 +46,7 @@ public class MemberServlet extends HttpServlet {
 		member.setPassword(password);
 		request.setAttribute("member", member);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/memberView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/memberViewEL.jsp");
 		rd.forward(request, response);	
 		
 	}

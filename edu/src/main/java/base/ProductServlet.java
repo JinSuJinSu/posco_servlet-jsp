@@ -38,7 +38,7 @@ public class ProductServlet extends HttpServlet {
 		default:
 			break;
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/productView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/productViewEL.jsp");
 		rd.forward(request, response);
 		
 	}

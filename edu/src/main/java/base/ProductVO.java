@@ -5,6 +5,16 @@ public class ProductVO {
 	private int bananaCount;
 	private int halabongCount;
 	
+	public ProductVO() {
+	}
+	
+	public ProductVO(int appleCount, int bananaCount, int halabongCount) {
+		this.appleCount = appleCount;
+		this.bananaCount = bananaCount;
+		this.halabongCount = halabongCount;
+	}
+
+
 	public int getAppleCount() {
 		return appleCount;
 	}

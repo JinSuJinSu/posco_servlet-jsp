@@ -46,7 +46,7 @@ public class CalcServlet extends HttpServlet {
 				break;	
 			}
 			request.setAttribute("number", result);
-			RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/calcResult.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/jspsrc/calcResultEL.jsp");
 			rd.forward(request, response);	
 		}		
 		
