@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="board.BoardVO" %>
+<%@ page import="vo.BoardVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
@@ -19,6 +19,7 @@ function check(){
 		document.getElementById("div1").style.display="block";
 		document.getElementById("div2").style.display="block";
 		document.getElementById("btn").style.display="none";
+		alert('한번 수정하면 복구할 수 없으니 주의 바랍니다.')
 }
 	
 }
@@ -27,7 +28,7 @@ function check(){
 <%
 List<String> userList = (List<String>)session.getAttribute("user");
 %>
-<h1>게시판</h1>
+<h1>게시판 조회</h1>
 <hr>
 <h2><%=userList.get(0)%></h2>
 <form method="get" action="/bbs/board">
@@ -52,7 +53,7 @@ List<String> userList = (List<String>)session.getAttribute("user");
 <div id="div2" style="display:none">
 <form method="get" action="/bbs/board">
 <input type="hidden" name="delete" value="${readvo.boardNO}">
-<input type="submit" value="삭제">
+<input type="submit" value="삭제" onclick="alert('삭제가 완료되었습니다.')">
 </form>
 </div>
 

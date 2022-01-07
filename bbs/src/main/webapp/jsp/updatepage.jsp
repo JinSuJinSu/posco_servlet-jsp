@@ -7,18 +7,28 @@
 <title>Insert title here</title>
 </head>
 <body>
+<script>
+function dataReset(){
+	let array = document.querySelectorAll(".data");
+	for(let i=0; i<array.length; i++){
+		array[i].value = "";
+	}
+	
+}
+</script>
 <h1>게시판 수정</h1>
 <hr>
-<form method="post" action="/bbs/board">
+<form method="post" action="/bbs/editboard">
 <input type="hidden" name = "update" value="${updatevo.boardNO}" required>
-아이디 : <input name="gid" value="${updatevo.userID}"><br>
-제목 : <input name="gtitle" value="${updatevo.title}"><br>
+아이디 : <input name="gid" value="${updatevo.userID}" readonly><br>
+제목 : <input class="data" name="gtitle" value="${updatevo.title}" required><br>
 내용물 : <br>
-<textarea name="gmemo" rows="10" cols="35">${updatevo.content}</textarea>
+<textarea class = "data" name="gmemo" rows="10" cols="35" required maxlength="300">${updatevo.content}</textarea>
 <br>
-<input type="submit" value="수정완료">
-<input type="reset" value="재작성">
+<input type="submit" value="수정완료" onclick="alert('수정이 완료되었습니다.')">
+<input type="reset" value="다시작성">
 </form>
-<button onclick="location.href='/bbs/board' ">수정 취소</button>
+<button onclick="dataReset();">글 전부 지우기</button>
+<button onclick="location.href='/bbs/board'">수정 취소</button>
 </body>
 </html>
