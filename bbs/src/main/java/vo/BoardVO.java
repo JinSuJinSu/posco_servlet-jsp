@@ -8,21 +8,33 @@ public class BoardVO {
 	private String title;
 	private String content;
 	private int readCount;
+	private int replyCount;
 	private String writeDate;
+	
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+
 	
 	public BoardVO() {
 	}
 	
-	
 	public BoardVO(int boardNo, String userID, String title,
-			int readCount, String writeDate) {
+			int readCount, int replyCount, String writeDate) {
 		this.boardNO = boardNo;
 		this.userID = userID;
 		this.title = title;
 		this.readCount = readCount;
+		this.replyCount = replyCount;
 		this.writeDate = writeDate;
 		
 	}
+	
 	
 	public int getBoardNO() {
 		return boardNO;

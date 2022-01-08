@@ -16,19 +16,16 @@ function dataReset(){
 	
 }
 </script>
-<h1>게시판 수정</h1>
-<hr>
-<form method="post" action="/bbs/editboard">
-<input type="hidden" name = "update" value="${updatevo.boardNO}" required>
-아이디 : <input name="gid" value="${updatevo.userID}" readonly><br>
-제목 : <input class="data" name="gtitle" value="${updatevo.title}" required><br>
+<h1>댓글 수정하기</h1>
+<form method="post" action="/bbs/reply">
+<input type="hidden" name = "update" value="${updatervo.replyNo}" required>
+아이디 : <input name="gid" value="${updatervo.replyer}" readonly><br>
 내용물 : <br>
-<textarea class = "data" name="gmemo" rows="10" cols="35" required maxlength="300">${updatevo.content}</textarea>
+<textarea class = "data" name="gmemo" rows="10" cols="35" required maxlength="300">${updatervo.replyContent}</textarea>
 <br>
 <input type="submit" value="수정완료" onclick="alert('수정이 완료되었습니다.')">
 <input type="reset" value="다시작성">
 </form>
 <button onclick="dataReset();">글 전부 지우기</button>
-<button onclick="location.href='/bbs/board?editNum=${updatevo.boardNO}'">수정 취소</button>
 </body>
 </html>

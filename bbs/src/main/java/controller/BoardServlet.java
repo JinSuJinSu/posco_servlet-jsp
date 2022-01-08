@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.BoardDAO;
+import dao.ReplyDAO;
 import vo.BoardVO;
+import vo.ReplyVO;
 
 /**
  * Servlet implementation class BoardServlet
@@ -22,6 +24,7 @@ import vo.BoardVO;
 @WebServlet("/board")
 public class BoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -31,33 +34,37 @@ public class BoardServlet extends HttpServlet {
 		String target = "/jsp/mainpage.jsp";
 		String delete = request.getParameter("delete"); // 삭제 기능에 필요한 변수
 		String update = request.getParameter("update"); // 수정 기능에 필요한 변수
-		String action = request.getParameter("action"); 
+		String read = request.getParameter("read");     // 조회 기능에 필요한 변수
 		String search = request.getParameter("search"); // 검색 기능에 필요한 변수
 		String word = request.getParameter("word");  // 검색 기능에 필요한 변수
 		String page = request.getParameter("page"); // 페이징 기능에 필요한 변수
 		String readUpdate = request.getParameter("readUpdate"); // 되돌리기에 필요한 변수
+		String editNum = request.getParameter("editNum"); // 되돌리기에 필요한 변수
+		
+		String reply = request.getParameter("reply"); // 응답을 받기 위해 필요한 변수
+		String replyNo = request.getParameter("replyNo"); // 응답을 받기 위해 필요한 변수
+		String replyDelete = request.getParameter("replyDelete"); // 응답을 받기 위해 필요한 변수
 		
 		BoardDAO dao = new BoardDAO();
 		BoardVO vo = new BoardVO();
+		ReplyDAO rdao = new ReplyDAO();
+		ReplyVO rvo = new ReplyVO();
+		
+
 		boolean result=false;	
 		HttpSession session = request.getSession();
 		
-		if(action!=null && action.equals("read")) {
+		
+		if(read!=null && read.equals("read")) {
 			int boardNo = Integer.valueOf(request.getParameter("boardNo"));
 			vo = dao.selectOne(boardNo);
 			vo.setReadCount(vo.getReadCount()+1);
 			result = dao.readUpdate(vo);
+			List<ReplyVO> dataList = rdao.selectReply(boardNo);
 			request.setAttribute("readvo", vo);
+			request.setAttribute("reply", dataList);
 			target = "/jsp/readpage.jsp";	
-		}
-		
-
-		if(action!=null && action.equals("edit")) {
-			int boardNo = Integer.valueOf(request.getParameter("boardNo"));
-			vo = dao.selectOne(boardNo);
-			request.setAttribute("readvo", vo);
-			target = "/jsp/readpage.jsp";	
-		}		
+		}	
 
 		// 데이터 삭제하기
 		if(delete!=null && !delete.equals("")) {
@@ -73,10 +80,30 @@ public class BoardServlet extends HttpServlet {
 				}
 			}
 			int rangeNumber = (int)Math.ceil((double)startNum/10);
+			
 			result = dao.delete(boardNo);
 			if(result) {
 				page = String.valueOf(rangeNumber);
 			}
+		
+		}
+		
+		// 수정 취소했을 때 최근 페이지로 이동하기
+		if(editNum!=null) {
+			int boardNo = Integer.valueOf(editNum);	
+			List<BoardVO> dataList = dao.selectAll();
+			int startNum=1;
+			for(BoardVO value : dataList) {
+				if(value.getBoardNO()==boardNo) {
+					break;
+				}
+				else {
+					startNum+=1;
+				}
+			}
+			int rangeNumber = (int)Math.ceil((double)startNum/10);
+			page = String.valueOf(rangeNumber);
+			
 		
 		}
 		
@@ -133,12 +160,29 @@ public class BoardServlet extends HttpServlet {
 			int rangeNumber = (int)Math.ceil((double)startNum/10);
 			page = String.valueOf(rangeNumber);			
 		}
-	
-
-//		List<BoardVO> dataList = dao.selectAll();
-//		request.setAttribute("data", dataList);
-//		RequestDispatcher rd = request.getRequestDispatcher(target);
-//		rd.forward(request, response);	
+		// 답변 달기 위한 조건
+		if(reply!=null && replyNo!=null) {
+			// 답변을 달기 시작한 시점으로 돌아가야 한다.
+			int boardNo = Integer.valueOf(replyNo);	
+			List<BoardVO> dataList = dao.selectAll();
+			int startNum=1;
+			for(BoardVO value : dataList) {
+				if(value.getBoardNO()==boardNo) {
+					break;
+				}
+				else {
+					startNum+=1;
+				}
+			}
+			int rangeNumber = (int)Math.ceil((double)startNum/10);
+			page = String.valueOf(rangeNumber);	
+			
+			// 답변을 달았으므로 답변수를 추가해준다.
+			vo = dao.selectOne(boardNo);
+			vo.setReplyCount(vo.getReplyCount()+1);
+			result = dao.replyUpdate(vo);			
+				
+		}
 		
 		List<BoardVO> dataList = dao.selectAll();
 		request.setAttribute("totalpage", dataList);
