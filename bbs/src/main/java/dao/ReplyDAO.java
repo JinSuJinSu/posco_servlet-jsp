@@ -13,7 +13,7 @@ import vo.ReplyVO;
 
 public class ReplyDAO {
 	
-	// 데이터 추가하기
+	// 특정 게시글에 답변을 달았을 때 데이터베이스에 추가
 	public boolean insert(ReplyVO vo) {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();
@@ -32,12 +32,12 @@ public class ReplyDAO {
 		return result;
 		
 	}
-	// 특정 조건을 만족하는 ReplyVO객체 가져오기
+	// 메소드 인자 값에 맞는 reply_no를 가진 ReplyVO객체 가져오기
 	public ReplyVO selectOne(int number) {
 		Connection conn = JDBC.getConnection();
 		ReplyVO vo=null;
 		try (Statement stmt = conn.createStatement()) {
-			ResultSet rs = stmt.executeQuery("select reply_no, board_no, replyer, replyer_content, "
+			ResultSet rs = stmt.executeQuery("select reply_no, board_no, replyer, reply_content, "
 					+ "date_format(reply_date, '%Y-%m-%d %H:%i:%s') reply_date from reply "
 					+ "where reply_no=" + number);
 			if (rs.next()) {
@@ -45,7 +45,7 @@ public class ReplyDAO {
 				vo.setReplyNo(rs.getInt("reply_no"));
 				vo.setBoardNo(rs.getInt("board_no"));
 				vo.setReplyer(rs.getString("replyer"));
-				vo.setReplyContent(rs.getString("replyer_content"));
+				vo.setReplyContent(rs.getString("reply_content"));
 				vo.setReplyDate(rs.getString("reply_date"));	
 
 			}
@@ -56,14 +56,14 @@ public class ReplyDAO {
 		return vo;
 	}
 	
-	// 게시판 번호와 일치하는 응답 리스트 가져오기
+	// 특정 게시판 번호와 일치하는 답변 리스트 가져오기
 	public List<ReplyVO> selectReply(int number) {
 		Connection conn = JDBC.getConnection();
 		List<ReplyVO> list = new ArrayList<ReplyVO>();
 		try(Statement stmt = conn.createStatement();){
 			ResultSet rs = stmt.executeQuery("select reply_no, board_no, replyer, reply_content, "
 					+ "date_format(reply_date, '%Y-%m-%d %H:%i:%s') reply_date from reply "
-					+ "where board_no=" + number);
+					+ "where board_no=" + number + " order by reply_no desc");
 			while(rs.next()) {
 				ReplyVO temp = new ReplyVO(rs.getInt("reply_no"), rs.getInt("board_no"),rs.getString("replyer"),
 						rs.getString("reply_content"), rs.getString("reply_date"));
@@ -78,7 +78,8 @@ public class ReplyDAO {
 		return list;
 	}
 	
-	// 댓글 삭제시 질문 번호와 연결되어 있는 board_no 가져오기
+	
+	// 댓글 삭제 또는 수정시 게시판 글의 번호와 연결되어 있는 board_no 가져오기
 	public int getBoard(int number) {
 		Connection conn = JDBC.getConnection();
 		int cnt=0;
@@ -102,6 +103,24 @@ public class ReplyDAO {
 		try (PreparedStatement pstmt = conn.prepareStatement("delete from reply where reply_no = ?")) {
 			pstmt.setInt(1, number);
 			pstmt.executeUpdate();
+			result = true;
+		} catch (SQLException se) {
+			System.out.println(se.getMessage());
+		}
+		JDBC.close(conn);
+		return result;
+	}
+	
+	// 댓글 수정
+	public boolean replyUpdate(ReplyVO vo) {
+		boolean result = false;
+		Connection conn = JDBC.getConnection();
+		try (PreparedStatement pstmt = conn.prepareStatement("update reply "
+				+ "set replyer = ?,  reply_content = ? where reply_no = ?")) {
+			pstmt.setString(1, vo.getReplyer());
+			pstmt.setString(2, vo.getReplyContent());
+			pstmt.setInt(3, vo.getReplyNo());
+			pstmt.executeUpdate();		
 			result = true;
 		} catch (SQLException se) {
 			System.out.println(se.getMessage());

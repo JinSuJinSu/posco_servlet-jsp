@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="/bbs/board">게시판을 만들어라</a>
-
+	<h1 style="text-align:center"><a href="/bbs/board">게시판 전체 보기</a></h1>
+<!-- 홈페이지 첫 번째 화면 -->
 </body>
 </html>

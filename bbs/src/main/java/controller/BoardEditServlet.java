@@ -41,7 +41,8 @@ public class BoardEditServlet extends HttpServlet {
 		String reply = request.getParameter("reply");
 		String replyer = request.getParameter("replyer");
 		String boardNo = request.getParameter("boardNo");
-			
+		
+		// 게시판 dao,vo와 댓글을 추가한 사람rdao, rvo를 받아온다.
 		boolean result = false;
 		BoardDAO dao = new BoardDAO();
 		BoardVO vo = new BoardVO();
@@ -84,8 +85,7 @@ public class BoardEditServlet extends HttpServlet {
 			response.sendRedirect("/bbs/board");
 
 			}
-		}
-		
+		}		
 		// 댓글 추가 요청을 받았을 때만 사용이 가능하다.
 		if(reply!=null && replyer!=null && boardNo!=null) {
 			int replyNo = Integer.valueOf(boardNo);
@@ -97,8 +97,6 @@ public class BoardEditServlet extends HttpServlet {
 				response.sendRedirect("/bbs/board?reply=reply&replyNo=" +replyNo);
 			}
 		}
-		
-
 		
 	}
 }

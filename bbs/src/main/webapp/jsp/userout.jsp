@@ -14,7 +14,6 @@
 List<String> userList = (List<String>)session.getAttribute("user");
 
 %>
-
 <h1>삭제를 원하시면 밑에다가 회원탈퇴를 입력하십시오</h1>
 <h2>회원 탈퇴 후 관련된 데이터는 전부 지워집니다.</h2>
 

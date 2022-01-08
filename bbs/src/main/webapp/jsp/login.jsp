@@ -9,12 +9,6 @@
 <body>
 <h1>로그인을 하세요</h1>
 
-<!-- <form name="login" method="post" action="/bbs/login">
-            아이디 : <input type="text" name="user_id"/><br />
-            패스워드 : <input type="password" name="user_pw" /><br />
-            
-            <input type="submit" value="로그인"><br>
-  </form> -->
  <form method="post" action="/bbs/login">
 아이디 : <input name="id" type="text" required><br>
 비밀번호 : <input name="password" type="password" required><br>

@@ -25,7 +25,22 @@ import vo.ReplyVO;
 public class BoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-
+	// 페이징 처리를 위해 필요한 함수
+	protected String pageCheck(BoardDAO dao, int boardNumber) {
+		List<BoardVO> dataList = dao.selectAll();
+		int startNum=1;
+		for(BoardVO value : dataList) {
+			if(value.getBoardNO()==boardNumber) {
+				break;
+			}
+			else {
+				startNum+=1;
+			}
+		}
+		int rangeNumber = (int)Math.ceil((double)startNum/10);
+		return String.valueOf(rangeNumber);
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
@@ -54,12 +69,12 @@ public class BoardServlet extends HttpServlet {
 		boolean result=false;	
 		HttpSession session = request.getSession();
 		
-		
+		// 글 조회하기
 		if(read!=null && read.equals("read")) {
 			int boardNo = Integer.valueOf(request.getParameter("boardNo"));
 			vo = dao.selectOne(boardNo);
-			vo.setReadCount(vo.getReadCount()+1);
-			result = dao.readUpdate(vo);
+			vo.setReadCount(vo.getReadCount()+1); // 게시물을 볼때마다 조회수를 1개 증가시킨다.
+			result = dao.readUpdate(vo); // 증가시킨 조회수를 update해서 db 데이터를 수정해준다.
 			List<ReplyVO> dataList = rdao.selectReply(boardNo);
 			request.setAttribute("readvo", vo);
 			request.setAttribute("reply", dataList);
@@ -69,42 +84,18 @@ public class BoardServlet extends HttpServlet {
 		// 데이터 삭제하기
 		if(delete!=null && !delete.equals("")) {
 			int boardNo = Integer.valueOf(delete);	
-			List<BoardVO> dataList = dao.selectAll();
-			int startNum=1;
-			for(BoardVO value : dataList) {
-				if(value.getBoardNO()==boardNo) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			int rangeNumber = (int)Math.ceil((double)startNum/10);
-			
+			String rangeNumber = pageCheck(dao,boardNo);		
 			result = dao.delete(boardNo);
 			if(result) {
-				page = String.valueOf(rangeNumber);
-			}
-		
+				page = rangeNumber;
+			}	
 		}
 		
 		// 수정 취소했을 때 최근 페이지로 이동하기
 		if(editNum!=null) {
 			int boardNo = Integer.valueOf(editNum);	
-			List<BoardVO> dataList = dao.selectAll();
-			int startNum=1;
-			for(BoardVO value : dataList) {
-				if(value.getBoardNO()==boardNo) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			int rangeNumber = (int)Math.ceil((double)startNum/10);
-			page = String.valueOf(rangeNumber);
-			
-		
+			String rangeNumber = pageCheck(dao,boardNo);
+			page = rangeNumber;
 		}
 		
 		// 업데이트 하기 위해 편집 페이지 이동
@@ -112,8 +103,7 @@ public class BoardServlet extends HttpServlet {
 			int boardNo = Integer.valueOf(request.getParameter("update"));
 			vo = dao.selectOne(boardNo);
 			request.setAttribute("updatevo", vo);
-			target="/jsp/updatepage.jsp";		
-			
+			target="/jsp/updatepage.jsp";				
 		}
 		
 		// 제목 검색 조건
@@ -122,11 +112,10 @@ public class BoardServlet extends HttpServlet {
 			request.setAttribute("data", dataList);
 			request.setAttribute("totalpage", new ArrayList<BoardVO>());		
 			RequestDispatcher rd = request.getRequestDispatcher(target);
-			rd.forward(request, response);		
-						
+			rd.forward(request, response);							
 		}
 		
-		// 콘텐트 검색 조건
+		// 콘텐츠 검색 조건
 		if(search!=null && search.equals("subcontent")) {
 			List<BoardVO> dataList = dao.search(word, "content");
 			request.setAttribute("data", dataList);
@@ -144,44 +133,23 @@ public class BoardServlet extends HttpServlet {
 			rd.forward(request, response);							
 		}
 		// 사용자가 최근에 접속한 게시판 목록으로 돌아갈 때
-		if(readUpdate!=null) {
-			
+		if(readUpdate!=null) {	
 			int boardNo = Integer.valueOf(readUpdate);	
-			List<BoardVO> dataList = dao.selectAll();
-			int startNum=1;
-			for(BoardVO value : dataList) {
-				if(value.getBoardNO()==boardNo) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			int rangeNumber = (int)Math.ceil((double)startNum/10);
-			page = String.valueOf(rangeNumber);			
+			String rangeNumber = pageCheck(dao,boardNo);
+			page = rangeNumber;			
 		}
 		// 답변 달기 위한 조건
 		if(reply!=null && replyNo!=null) {
 			// 답변을 달기 시작한 시점으로 돌아가야 한다.
 			int boardNo = Integer.valueOf(replyNo);	
-			List<BoardVO> dataList = dao.selectAll();
-			int startNum=1;
-			for(BoardVO value : dataList) {
-				if(value.getBoardNO()==boardNo) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			int rangeNumber = (int)Math.ceil((double)startNum/10);
-			page = String.valueOf(rangeNumber);	
+			String rangeNumber = pageCheck(dao,boardNo);
+			page = rangeNumber;	
 			
-			// 답변을 달았으므로 답변수를 추가해준다.
+			// 댓글을 달았으므로 댓글 수를 초기화 해준다.
+			List<ReplyVO> replyList = rdao.selectReply(boardNo);
 			vo = dao.selectOne(boardNo);
-			vo.setReplyCount(vo.getReplyCount()+1);
-			result = dao.replyUpdate(vo);			
-				
+			vo.setReplyCount(replyList.size());
+			result = dao.replyUpdate(vo);						
 		}
 		
 		List<BoardVO> dataList = dao.selectAll();
@@ -189,8 +157,7 @@ public class BoardServlet extends HttpServlet {
 	
 		int startPage;
 		if(page==null) {
-			startPage = 1;
-			
+			startPage = 1;			
 		}
 		else if(page.equals("1")) {
 			startPage=1;		
@@ -203,12 +170,10 @@ public class BoardServlet extends HttpServlet {
 		List<BoardVO> limitList = dao.selectPage(startPage-1, 10);
 		request.setAttribute("data", limitList);
 		RequestDispatcher rd = request.getRequestDispatcher(target);
-		rd.forward(request, response);		
-		
+		rd.forward(request, response);				
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		}
 	}
 

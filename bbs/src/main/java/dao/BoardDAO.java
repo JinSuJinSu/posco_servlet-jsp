@@ -12,7 +12,7 @@ import vo.BoardVO;
 
 public class BoardDAO {
 	
-	// 전체 글 선택
+	// 전체 게시판 글 선택(페이징 처리를 위해 필요)
 	public List<BoardVO> selectAll() {
 		Connection conn = JDBC.getConnection();
 		List<BoardVO> list = new ArrayList<BoardVO>();
@@ -61,7 +61,7 @@ public class BoardDAO {
 		return vo;
 	}
 	
-	// 특정 글자를 포함하고 있는 글 찾는데 필요한 메소드
+	// 특정 글자를 포함하고 있는 글을 찾아준다.
 	public List<BoardVO> search(String value, String condition){
 		Connection conn = JDBC.getConnection();
 		List<BoardVO> list = new ArrayList<BoardVO>();
@@ -85,7 +85,7 @@ public class BoardDAO {
 				
 	}
 	
-	// 특정 유저의 글만 볼 수 있도록 하는데 필요한 메소드
+	// 특정 유저의 게시판 내용들만 보여준다.
 	public List<BoardVO> searchUser(String user){
 		Connection conn = JDBC.getConnection();
 		List<BoardVO> list = new ArrayList<BoardVO>();
@@ -108,7 +108,7 @@ public class BoardDAO {
 				
 	}
 	
-	// 글 추가 시 필요한 메소드
+	// 유저가 작성한 글을 추가해준다.
 	public boolean insert(BoardVO vo) {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();
@@ -129,7 +129,7 @@ public class BoardDAO {
 		return result;
 		
 	}
-	// 글 삭제시 필요한 메소드
+	// 글을 삭제해버린다.
 	public boolean delete(int number) {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();
@@ -144,7 +144,7 @@ public class BoardDAO {
 		return result;
 	}
 	
-	// 글 작성 시 수정을 위한 메소드
+	// 글을 수정할 때 쓰는 메소드
 	public boolean update(BoardVO vo) {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();

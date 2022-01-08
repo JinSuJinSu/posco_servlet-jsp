@@ -30,7 +30,7 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		List<String> user = (List<String>)session.getAttribute("user");
 		if(logout!=null && !logout.equals("")) {
-			session.invalidate();
+			session.invalidate(); // 로그아웃 시 유저 정보를 가지고 있는 세션을 삭제해준다.
 		    out.print("<script>");
 		    out.print("alert('로그아웃에 성공하셨습니다.');");
 		    out.print("location='/bbs/board';");
@@ -52,7 +52,7 @@ public class UserServlet extends HttpServlet {
 		userList.add(password);
 		UserDAO dao = new UserDAO();
 		UserVO vo = dao.selectOne(id);
-		if(vo!=null) {
+		if(vo!=null) { // 로그인할 때 아이디와 비밀번호가 일치하는지 체크
 			if(userList.get(0).equals(vo.getUserID()) && userList.get(1).equals(vo.getPassword())) {
 				if (session.getAttribute("user") == null)
 					session.setAttribute("user", userList);
@@ -76,11 +76,8 @@ public class UserServlet extends HttpServlet {
 				   out.print("location='jsp/login.jsp';");
 				   out.print("</script>");
 			}
-
-
 			}			
 		
 		}
-
 
 

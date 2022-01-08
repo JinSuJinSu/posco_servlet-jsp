@@ -8,7 +8,7 @@
 </head>
 <body>
 <script>
-function dataReset(){
+function dataReset(){ // 댓글을 완전히 새로 쓰고 싶을 때 쓰는 메소드(모든 글을 지워준다.)
 	let array = document.querySelectorAll(".data");
 	for(let i=0; i<array.length; i++){
 		array[i].value = "";
