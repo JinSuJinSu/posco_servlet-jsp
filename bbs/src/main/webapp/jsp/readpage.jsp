@@ -42,7 +42,7 @@ function reply(){ // 변수 정의(댓글을 작성하기 위해서 필요한 �
 	div.className = "addedword";
 	form.method='post';
 	form.action='/bbs/editboard';
-	textarea.rows="8";
+	textarea.rows="5";
 	textarea.cols = "35";
 	textarea.required = true;
 	textarea.maxlength = "200";
