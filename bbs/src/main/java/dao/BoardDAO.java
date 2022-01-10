@@ -41,7 +41,7 @@ public class BoardDAO {
 		BoardVO vo=null;
 		try (Statement stmt = conn.createStatement()) {
 			ResultSet rs = stmt.executeQuery("select board_no, user_id, title, content, "
-					+ "read_count, reply_count, date_format(write_date, '%Y-%m-%d %H:%i:%s') write_date from board "
+					+ "read_count, reply_count, date_format(write_date, '%Y-%m-%d %H:%i:%s') write_date, fileurl from board "
 					+ "where board_no=" + number);
 			if (rs.next()) {
 				vo = new BoardVO();
@@ -52,6 +52,7 @@ public class BoardDAO {
 				vo.setReadCount(rs.getInt("read_count"));	
 				vo.setReplyCount(rs.getInt("reply_count"));
 				vo.setWriteDate(rs.getString("write_date"));
+				vo.setFileurl(rs.getString("fileurl"));
 
 			}
 		} catch (SQLException se) {
@@ -113,13 +114,14 @@ public class BoardDAO {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();
 		try (PreparedStatement pstmt = conn
-				.prepareStatement("insert into board (user_id, title, content, read_count, reply_count, write_date) "
-						+ "values(?, ?, ?, ?, ?, now())")) {
+				.prepareStatement("insert into board (user_id, title, content, read_count, reply_count, write_date, fileurl) "
+						+ "values(?, ?, ?, ?, ?, now(), ?)")) {
 				pstmt.setString(1, vo.getUserID());
 				pstmt.setString(2, vo.getTitle());
 				pstmt.setString(3, vo.getContent());
 				pstmt.setInt(4, 0);
 				pstmt.setInt(5, 0);
+				pstmt.setString(6, vo.getFileurl());
 				pstmt.executeUpdate();
 				result = true;
 		} catch (SQLException se) {
@@ -149,11 +151,12 @@ public class BoardDAO {
 		boolean result = false;
 		Connection conn = JDBC.getConnection();
 		try (PreparedStatement pstmt = conn.prepareStatement("update board "
-				+ "set user_id = ?,  title = ?, content = ? where board_no = ?")) {
+				+ "set user_id = ?,  title = ?, content = ?, fileurl = ? where board_no = ?")) {
 			pstmt.setString(1, vo.getUserID());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getContent());
-			pstmt.setInt(4, vo.getBoardNO());
+			pstmt.setString(4, vo.getFileurl());
+			pstmt.setInt(5, vo.getBoardNO());
 			pstmt.executeUpdate();		
 			result = true;
 		} catch (SQLException se) {

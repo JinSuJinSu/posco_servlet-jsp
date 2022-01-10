@@ -91,7 +91,7 @@ else{
 		 }
 		 else{
 		 %> <!-- 제목을 클릭하면 상세내용 조회가 가능하다. -->
-			<td><a href="/bbs/board?boardNo=<%= value.getBoardNO() %>&read=read">
+			<td><a href="/bbs/board?boardNo=<%= value.getBoardNO() %>&read=read" style="text-decoration-line:none";>
 			<%= value.getTitle()%></a></td>
 			
 		 <%
@@ -114,7 +114,7 @@ else{
 	   int endPage = (int)Math.ceil((double)totalPage/10);
 	   for(int i=1; i<=endPage; i++){
 	%>
-		<a href="/bbs/board?page=<%=i %>" style="font-size:20px; text-decoration-line:none;"><%=i %>  </a>
+		<a href="/bbs/board?page=<%=i %>" style="font-size:20px; text-decoration-line:none;"><%=i    %>  </a>
 	<%   
 	   }  
    }
@@ -133,7 +133,7 @@ else{
 <button id = "add" onclick="dislpayDiv(1);"> 게시판 작성</button>
 <div id="write"  style="display:none">
 <h1>글을 작성하세요</h1>
-<form method="post" action="/bbs/editboard"> <!-- 서블릿으로 request -->
+<form method="post" action="/bbs/editboard" enctype="multipart/form-data"> <!-- 서블릿으로 request -->
 <input type="hidden" name = "insert" value="<%= totalPage%>" required>
 아이디 : <input name = "gid" value="<%=userList.get(0)%>" readonly><br>
 글 제목 : <input name="gtitle" type="text" required maxlength="20" placeholder="제목은 최대 20자까지 작성 가능합니다."><br>
@@ -141,6 +141,7 @@ else{
 <textarea name="gmemo" rows="10" cols="40" required maxlength="300"
 placeholder="텍스트는 최대 300까지 작성 가능합니다."></textarea>
 <br>
+이미지 : <input type="file" name="file" >
 <input type="submit" value="등록" onclick="alert('글이 추가되었습니다.')">
 <input type="reset" value="재작성">
 <input type="submit" value="작성취소" onclick="reject();">

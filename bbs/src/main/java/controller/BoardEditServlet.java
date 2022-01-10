@@ -1,13 +1,19 @@
 package controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import dao.BoardDAO;
 import dao.ReplyDAO;
@@ -17,6 +23,7 @@ import vo.ReplyVO;
 /**
  * Servlet implementation class BoardEditServlet
  */
+@MultipartConfig
 @WebServlet("/editboard")
 public class BoardEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -48,12 +55,37 @@ public class BoardEditServlet extends HttpServlet {
 		BoardVO vo = new BoardVO();
 		ReplyDAO rdao = new ReplyDAO();
 		ReplyVO rvo = new ReplyVO();
+
 		
 		// 글 삽입, 수정 요청을 받았을 때만 수행이 가능
 		if(id!=null && memo!=null & title!=null) {		
 			vo.setUserID(id);
 			vo.setContent(memo);
 			vo.setTitle(title);
+					
+		try {
+
+			String uploadPath = getServletContext().getRealPath("") + File.separator + "/uploadimages";
+			File uploadDir = new File(uploadPath);
+		    Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+		    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+		    InputStream fileContent = filePart.getInputStream();
+			String realPath = "C:/Users/BIT/eclipse-workspace/bbs/src/main/webapp/uploadimages/" +  fileName;
+			FileOutputStream fos = new FileOutputStream(realPath);
+			String urlPath = "/bbs/uploadimages/" + fileName;
+		
+			byte[] b = new byte[2048];
+			int n;
+			while ((n = fileContent.read(b)) > 0) {
+				fos.write(b, 0, n);
+			}
+			vo.setFileurl(urlPath);
+			
+			}
+			catch(Exception e) {
+				// 파일 업로드가 안되어 있을 경우 패스한다.
+			}
+			
 		}
 		
 		// 글 수정 요청을 받았을 때

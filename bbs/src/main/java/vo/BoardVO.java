@@ -10,16 +10,8 @@ public class BoardVO {
 	private int readCount;
 	private int replyCount;
 	private String writeDate;
+	private String fileurl;
 	
-	public int getReplyCount() {
-		return replyCount;
-	}
-
-
-	public void setReplyCount(int replyCount) {
-		this.replyCount = replyCount;
-	}
-
 	
 	public BoardVO() {
 	}
@@ -33,6 +25,17 @@ public class BoardVO {
 		this.replyCount = replyCount;
 		this.writeDate = writeDate;
 		
+	}
+	
+	public BoardVO(int boardNo, String userID, String title,
+		int readCount, int replyCount, String writeDate, String fileurl) {
+		this.boardNO = boardNo;
+		this.userID = userID;
+		this.title = title;
+		this.readCount = readCount;
+		this.replyCount = replyCount;
+		this.writeDate = writeDate;
+		this.fileurl = fileurl;	
 	}
 	
 	
@@ -71,6 +74,22 @@ public class BoardVO {
 	}
 	public void setWriteDate(String writeDate) {
 		this.writeDate = writeDate;
+	}
+	
+	public String getFileurl() {
+		return fileurl;
+	}
+
+	public void setFileurl(String fileurl) {
+		this.fileurl = fileurl;
+	}
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	

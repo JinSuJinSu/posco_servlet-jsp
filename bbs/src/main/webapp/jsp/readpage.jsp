@@ -36,7 +36,7 @@ function reply(){ // 변수 정의(댓글을 작성하기 위해서 필요한 �
 	let input = document.createElement("input");
 	let button = document.createElement("input");
 	let br = document.createElement("br");
-	let user = document.getElementById("user").innerText.slice(6);
+	let user = document.getElementById("user").innerText.slice(9);
 	
 	// 속성 정의(태그 마다 필요한 속성들을 전부 추가해준다.)
 	div.className = "addedword";
@@ -51,7 +51,7 @@ function reply(){ // 변수 정의(댓글을 작성하기 위해서 필요한 �
 	hidden_input.name = 'boardNo';
 	hidden_input.value = document.getElementById("reply").value;
 	input.name = 'replyer';
-	input.value = document.getElementById("user").innerText.slice(6);
+	input.value = document.getElementById("user").innerText.slice(9);
 	input.style.display='none';
    	button.type='submit';
 	button.value='작성완료';
@@ -118,19 +118,28 @@ function reply_check2(index){
 <%
 List<String> userList = (List<String>)session.getAttribute("user");
 List<ReplyVO> replyList = (List<ReplyVO>)request.getAttribute("reply");
+BoardVO vo = (BoardVO)request.getAttribute("readvo");
 // 댓글을 단 사람들이 저장되어 있는 데이터 리스트
 %>
 
 
 <h1>게시판 조회</h1>
 <hr>
-<h2 id="user">작성자 : <%=userList.get(0)%></h2>
+<h2 id="user">로그인 유저 : <%=userList.get(0)%></h2>
 <form method="get" action="/bbs/board">
 <input id = "reply" name="readUpdate" type="hidden" value="${readvo.boardNO}" >
-아이디 : <input id="idcheck1" value="${readvo.userID}" readonly><br>
+작성자 : <input id="idcheck1" value="${readvo.userID}" readonly><br>
 제목 : <input value="${readvo.title}" readonly> <br>
 내용물 : <br>
-<textarea rows="10" cols="35" readonly>${readvo.content}</textarea>
+<textarea rows="10" cols="35" readonly>${readvo.content}</textarea><br>
+<%
+if(vo.getFileurl()!=null){	
+%>	
+	이미지<br>
+	<img src="<%=vo.getFileurl()%>" width="200px" height="200px">
+<%	
+}
+%>
 <br>
 <input type="submit" value="게시판 목록으로">
 </form>
